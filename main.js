@@ -1,8 +1,14 @@
+import "./files/todolist/style/main.scss"
 
-import { compareAsc, format } from 'date-fns'
+import { SlotWrapperBuilder } from "./files/todolist/js/slotWrapperBuilder.js"
+import { SlotBuilder } from "./files/todolist/js/slotBuilder.js"
+
+// import { compareAsc, format } from 'date-fns'
 
 const getButton = document.querySelector(".get");
 const createButton = document.querySelector(".create");
+
+const slotWrapper = new SlotWrapperBuilder().element
 
 getButton.addEventListener("click", handleGetButton);
 createButton.addEventListener("click", handleCreateButton);
@@ -46,6 +52,8 @@ const workingData = [
     }
 ]
 
+const slots = []
+
 
 function handleGetButton( event ){
     console.log("ok click");
@@ -82,15 +90,34 @@ function handleCreateButton( event ){
 }
 
 
+document.body.appendChild(slotWrapper)
+
+initSlots()
+displaySlots()
+
+function initSlots(){
+    workingData.forEach((infos, slotIndex) => {
+        slots.push(new SlotBuilder({ infos, slotIndex }))
+    })
+}
+
+function displaySlots(){
+    slots.forEach(slot => {
+        slotWrapper.appendChild(slot.slotElement)
+    })
+}
 
 
-format(new Date(2014, 1, 11), 'yyyy-MM-dd')
-//=> '2014-02-11'
+console.log("slots : ", slots);
 
-const dates = [
-    new Date(1995, 6, 2),
-    new Date(1987, 1, 11),
-    new Date(1989, 6, 10),
-]
 
-console.log("test date sorting : ", dates.sort(compareAsc));
+// format(new Date(2014, 1, 11), 'yyyy-MM-dd')
+// //=> '2014-02-11'
+
+// const dates = [
+//     new Date(1995, 6, 2),
+//     new Date(1987, 1, 11),
+//     new Date(1989, 6, 10),
+// ]
+
+// console.log("test date sorting : ", dates.sort(compareAsc));
