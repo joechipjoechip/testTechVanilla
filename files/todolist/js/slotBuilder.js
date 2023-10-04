@@ -43,6 +43,7 @@ export class SlotBuilder {
         this.children.inputStartDate.setAttribute("type", "text")
         this.children.inputStartDate.setAttribute("value", this.infos.start_date)
 
+        // Add .slot-child class to every children
         Object.keys(this.children).forEach(childKey => this.children[childKey].classList.add("slot-child"))
 
     }
