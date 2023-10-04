@@ -9,8 +9,11 @@ export class SlotBuilder {
         this.createSlotElement()
         this.createChildren()
         this.appendChildren()
+
+        return this.slotElement
     }
 
+    // Basics
     createSlotElement(){
         this.slotElement = document.createElement("div");
 
@@ -23,10 +26,9 @@ export class SlotBuilder {
     createChildren(){
 
         // Label
-        this.children.inputLabel = document.createElement("textarea")
+        this.children.inputLabel = document.createElement("input")
         this.children.inputLabel.classList.add("slot-label")
         this.children.inputLabel.setAttribute("type", "text")
-        this.children.inputLabel.setAttribute("placeholder", this.infos.label)
         this.children.inputLabel.setAttribute("value", this.infos.label)
         
         // Description

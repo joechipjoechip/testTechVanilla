@@ -1,22 +1,26 @@
 export class SlotWrapperBuilder {
 
     constructor(){
-        this.element = null
+        this.wrapperElement = null
 
         this.createWrapperElement()
 
         this.initEvents()
+
+        return this.wrapperElement
     }
 
+    // Basics
     createWrapperElement(){
-        this.element = document.createElement("div")
-        this.element.classList.add("slots-wrapper")
+        this.wrapperElement = document.createElement("div")
+        this.wrapperElement.classList.add("slots-wrapper")
     }
 
     initEvents(){
-        this.element.addEventListener("click", event => this.handleClick(event))
+        this.wrapperElement.addEventListener("click", event => this.handleClick(event))
     }
 
+    // Events handlers
     handleClick(event){
 
         if( event.target.closest(".slot-container") ){
@@ -25,22 +29,22 @@ export class SlotWrapperBuilder {
             const clickedSlotIndex = parseInt(event.target.closest(".slot-container").dataset.slotIndex)
             this.setSlotsStates(clickedSlotIndex)
 
-            if( !event.target.classList.contains("slot-container") ){
-                // click on an an input directly
-                this.handleChildClick(event.target);
+            if( event.target.classList.contains("slot-child") ){
+                this.manageChildClick(event.target);
             }
 
         } else {
             // click outside a slot
 
-            Array.from(this.element.children).forEach(child => {
+            Array.from(this.wrapperElement.children).forEach(child => {
                 this.setInactiveElementAndChildren(child)
             })
 
         }
     }
 
-    handleChildClick(child){
+    // Methods
+    manageChildClick(child){
 
         Array.from(child.closest(".slot-container").children).forEach(brother => {
             if( brother === child ){
@@ -55,7 +59,7 @@ export class SlotWrapperBuilder {
 
     setSlotsStates( clickedSlotIndex ){
 
-        Array.from(this.element.children).forEach(child => {
+        Array.from(this.wrapperElement.children).forEach(child => {
 
             if( parseInt(child.dataset.slotIndex) === clickedSlotIndex ){
                 this.setActive(child)

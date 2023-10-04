@@ -8,7 +8,7 @@ import { SlotBuilder } from "./files/todolist/js/slotBuilder.js"
 const getButton = document.querySelector(".get");
 const createButton = document.querySelector(".create");
 
-const slotWrapper = new SlotWrapperBuilder().element
+const slotWrapper = new SlotWrapperBuilder()
 
 getButton.addEventListener("click", handleGetButton);
 createButton.addEventListener("click", handleCreateButton);
@@ -103,7 +103,7 @@ function initSlots(){
 
 function displaySlots(){
     slots.forEach(slot => {
-        slotWrapper.appendChild(slot.slotElement)
+        slotWrapper.appendChild(slot)
     })
 }
 
