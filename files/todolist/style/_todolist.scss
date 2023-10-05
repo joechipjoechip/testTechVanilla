@@ -1,3 +1,11 @@
+.task-builder {
+
+    &-wrapper {
+        border: solid 2px orange;
+    }
+}
+
+
 .slots-wrapper {
     border: solid 1px orange;
     display: flex;
@@ -5,7 +13,8 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 70rem;
+    height: 90vh;
+    // max-width: 70rem;
     margin: 0 auto;
 
     & * {
@@ -17,14 +26,17 @@
 .slot {
 
     &-container {
+        @include border-radius;
+        width: 90%;
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-between;
+        justify-content: space-around;
+        margin: 1rem auto;
 
         transition: all .35s;
     
         &.active {
-            padding: 1rem 0;
+            padding: 2rem 0;
             opacity: 1;
             border: solid 3px green;
         }
@@ -38,24 +50,47 @@
     }
     
     &-child {
-        
+        @include border-radius;
+        padding: 0.75rem;
+        overflow: hidden;
         background-color: rgba(0,0,0, 0.1);
-        
-        &.active {
-            background-color: lime;
-        }
+        cursor: default;
     }
 
     &-label {
-        width: 25%;
+        width: 15%;
     }
 
     &-description {
-        width: 35%;
+        width: 25%;
     }
 
     &-start-date {
-        width: 25%;
+        width: 20%;
+    }
+    
+    &-end-date {
+        cursor: pointer;
+        width: 20%;
+        opacity: 0.2;
+
+        transition: opacity .4s;
+
+        &.fullfilled,
+        &:active,
+        &:focus {
+            opacity: 1;
+        }
+    }
+
+    &-button {
+        &-delete {
+            cursor: pointer;
+
+            &:focus {
+                border: solid 1px red;
+            }
+        }
     }
 
 

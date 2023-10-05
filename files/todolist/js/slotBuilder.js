@@ -6,19 +6,27 @@ export class SlotBuilder {
         this.slotElement = null
         this.children = {}
 
-        this.createSlotElement()
-        this.createChildren()
-        this.appendChildren()
+        this.PARENT_CLASS = "slots-wrapper"
+        this.CHILD_CONTAINER_CLASS = "slot-container"
+
+        this.init()
 
         return this.slotElement
     }
 
     // Basics
+    init(){
+        this.createSlotElement()
+        this.createChildren()
+        this.initEvents()
+        this.appendChildren()
+    }
+
     createSlotElement(){
+        // this.slotElement = document.createElement("form");
         this.slotElement = document.createElement("div");
 
-        this.slotElement.classList.add("slot-container")
-        this.slotElement.classList.add("inactive")
+        this.slotElement.classList.add(this.CHILD_CONTAINER_CLASS, "inactive")
         this.slotElement.dataset.slotIndex = this.slotIndex
         this.slotElement.dataset.order = this.slotIndex
     }
@@ -26,22 +34,48 @@ export class SlotBuilder {
     createChildren(){
 
         // Label
-        this.children.inputLabel = document.createElement("input")
-        this.children.inputLabel.classList.add("slot-label")
-        this.children.inputLabel.type = "text"
-        this.children.inputLabel.value = this.infos.label
+        this.children.label = document.createElement("p")
+        Object.assign(this.children.label, {
+            className: "slot-label",
+            innerText: decodeURI(this.infos.label),
+        })
+        this.children.label.dataset.labelVanilla = this.infos.label
         
         // Description
-        this.children.inputDescription = document.createElement("textarea")
-        this.children.inputDescription.classList.add("slot-description")
-        this.children.inputDescription.value = this.infos.description
+        this.children.description = document.createElement("p")
+        Object.assign(this.children.description, {
+            className: "slot-description",
+            innerText:  this.infos.description
+        })
 
         // Start date
-        this.children.inputStartDate = document.createElement("input")
-        this.children.inputStartDate.classList.add("slot-start-date")
-        this.children.inputStartDate.type = "date"
-        this.children.inputStartDate.value = this.infos.start_date.split("T")[0]
-        // .split() because we have "2022-06-01T15:00:00Z" and the good format is "2018-07-22"
+        this.children.startDate = document.createElement("p")
+        Object.assign(this.children.startDate, {
+            className: "slot-start-date",
+            innerText: this.infos.start_date.split("T")[0]
+            // .split() because we have "2022-06-01T15:00:00Z" and the html standard is "2018-07-22"
+        })
+
+        // End date
+        this.children.endDate = document.createElement("input")
+        Object.assign(this.children.endDate, {
+            className: "slot-end-date updatable",
+            type:  "date"
+        })
+        
+        if( this.infos.end_date ){
+            this.children.endDate.value = this.infos.end_date.split("T")[0]
+            this.children.endDate.classList.add("fullfilled")
+        } else {
+            this.children.endDate.value = this.infos.start_date.split("T")[0]
+        }
+
+        // Delete button
+        this.children.buttonDelete = document.createElement("button")
+        Object.assign(this.children.buttonDelete, {
+            className: "slot-button-delete",
+            innerText: "Delete"
+        })
 
         // Add .slot-child class to every children
         Object.keys(this.children).forEach(childKey => this.children[childKey].classList.add("slot-child"))
@@ -50,6 +84,24 @@ export class SlotBuilder {
 
     appendChildren(){
         Object.keys(this.children).forEach(childKey => this.slotElement.appendChild(this.children[childKey]))
+    }
+
+    // Events
+    initEvents(){
+        // this.children.endDate.addEventListener("change", event => this.handleChange(event))
+        this.children.endDate.addEventListener("focus", event => this.handleFocus(event))
+
+        // this.children.buttonDelete.addEventListener("click", event => this.handleDelete(event))
+    }
+
+    // Handlers
+    handleFocus(event){
+        const wrapper = event.target.closest(`.${this.PARENT_CLASS}`)
+        const currentFocusedSlotIndex = parseInt(event.target.closest(`.${this.CHILD_CONTAINER_CLASS}`).dataset.slotIndex)
+
+        const customFocusEvent = new CustomEvent("from-child-to-parent--focus-specific-slot", { detail: currentFocusedSlotIndex})
+        
+        wrapper.dispatchEvent(customFocusEvent)
     }
 
 }
