@@ -28,20 +28,20 @@ export class SlotBuilder {
         // Label
         this.children.inputLabel = document.createElement("input")
         this.children.inputLabel.classList.add("slot-label")
-        this.children.inputLabel.setAttribute("type", "text")
-        this.children.inputLabel.setAttribute("value", this.infos.label)
+        this.children.inputLabel.type = "text"
+        this.children.inputLabel.value = this.infos.label
         
         // Description
-        this.children.inputDescription = document.createElement("input")
+        this.children.inputDescription = document.createElement("textarea")
         this.children.inputDescription.classList.add("slot-description")
-        this.children.inputDescription.setAttribute("type", "text")
-        this.children.inputDescription.setAttribute("value", this.infos.description) 
+        this.children.inputDescription.value = this.infos.description
 
         // Start date
         this.children.inputStartDate = document.createElement("input")
         this.children.inputStartDate.classList.add("slot-start-date")
-        this.children.inputStartDate.setAttribute("type", "text")
-        this.children.inputStartDate.setAttribute("value", this.infos.start_date)
+        this.children.inputStartDate.type = "date"
+        this.children.inputStartDate.value = this.infos.start_date.split("T")[0]
+        // .split() because we have "2022-06-01T15:00:00Z" and the good format is "2018-07-22"
 
         // Add .slot-child class to every children
         Object.keys(this.children).forEach(childKey => this.children[childKey].classList.add("slot-child"))

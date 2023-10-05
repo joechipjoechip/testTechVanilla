@@ -23,10 +23,12 @@ export class SlotWrapperBuilder {
     // Events handlers
     handleClick(event){
 
-        if( event.target.closest(".slot-container") ){
+        const slotContainer = event.target.closest(".slot-container")
+
+        if( slotContainer ){
             // click on a slot
 
-            const clickedSlotIndex = parseInt(event.target.closest(".slot-container").dataset.slotIndex)
+            const clickedSlotIndex = parseInt(slotContainer.dataset.slotIndex)
             this.setSlotsStates(clickedSlotIndex)
 
             if( event.target.classList.contains("slot-child") ){
@@ -37,7 +39,7 @@ export class SlotWrapperBuilder {
             // click outside a slot
 
             Array.from(this.wrapperElement.children).forEach(child => {
-                this.setInactiveElementAndChildren(child)
+                this.setInactiveSlotAndChildren(child)
             })
 
         }
@@ -64,7 +66,7 @@ export class SlotWrapperBuilder {
             if( parseInt(child.dataset.slotIndex) === clickedSlotIndex ){
                 this.setActive(child)
             } else {
-                this.setInactiveElementAndChildren(child)
+                this.setInactiveSlotAndChildren(child)
             }
 
         })
@@ -81,7 +83,7 @@ export class SlotWrapperBuilder {
         slot.classList.contains("active") && slot.classList.remove("active")
     }
 
-    setInactiveElementAndChildren(element){
+    setInactiveSlotAndChildren(element){
         // Set inactive element
         this.setInactive(element)
         // and its children
