@@ -8,6 +8,8 @@ export class TaskList {
         this.CHILD_CLASS = "slot-container"
         this.arbitraryDateSuffix = "T15:00:00Z"
 
+        this.dev = true
+
         this.init()
 
         return this.wrapperElement
@@ -107,12 +109,12 @@ export class TaskList {
 
     handleSpecificActions(clickedElement){
         if( clickedElement.classList.contains("slot-button-delete") ){
-            this.actDelete(clickedElement)
+            this.deleteTask(clickedElement)
         }
     }
 
-    actDelete(clickedElement){
-        const slotContainer = clickedElement.closest(`.${this.CHILD_CLASS}`)
+    deleteTask(taskToDelete){
+        const slotContainer = taskToDelete.closest(`.${this.CHILD_CLASS}`)
         const labelToTarget = slotContainer.querySelector(".slot-label").dataset.labelVanilla
 
         fetch(`http://localhost:9000/v1/tasks/${encodeURI(labelToTarget)}`, {
@@ -127,18 +129,59 @@ export class TaskList {
     }
 
     requestFreshList( event ){
-        fetch("http://localhost:9000/v1/tasks", {
-            method: "GET",
-            mode: "cors"
-        })
-        .then(response => response.json())
-        .then(response => {
-            this.freshList = response
+
+        if( this.dev ){
+
+            console.log("dev = true")
+
+            this.freshList = [
+                {
+                    "label": "cin%C3%A9ma",
+                    "description": "demander les horaires à Marc",
+                    "start_date": "2023-10-06T15:00:00Z",
+                    "end_date": ""
+                },
+                {
+                    "label": "courses",
+                    "description": "pain\nlait\noeufs",
+                    "start_date": "2023-10-06T15:00:00Z",
+                    "end_date": "2023-10-08T15:00:00Z"
+                },
+                {
+                    "label": "cadeaux%20noel",
+                    "description": "timoté : tricycle\nmarie : gants MMA",
+                    "start_date": "2023-10-06T15:00:00Z",
+                    "end_date": "2023-12-14T15:00:00Z"
+                },
+                {
+                    "label": "bouquins",
+                    "description": "dora l'exploratrice\n1984",
+                    "start_date": "2023-10-06T15:00:00Z",
+                    "end_date": "2023-11-11T15:00:00Z"
+                }
+            ]
 
             this.emptyWrapper()
             this.appendFreshList()
 
-        })
+        } else {
+
+            fetch("http://localhost:9000/v1/tasks", {
+                method: "GET",
+                mode: "cors"
+            })
+            .then(response => response.json())
+            .then(response => {
+                this.freshList = response
+    
+                console.log("working data : ", response)
+    
+                this.emptyWrapper()
+                this.appendFreshList()
+    
+            })
+
+        }
     }
 
     emptyWrapper(){

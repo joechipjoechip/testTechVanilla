@@ -20,9 +20,11 @@ export class TaskConstructor{
 
     createWrapperElement(){
         this.element = document.createElement("form")
-        this.element.classList.add("task-builder-wrapper")
-        this.element.id = "task-builder"
-        this.element.name = "task-builder"
+        Object.assign(this.element, {
+            classList: "task-builder-wrapper",
+            id: "task-builder",
+            name: "task-builder"
+        })
     }
 
     createInputsElements(){
