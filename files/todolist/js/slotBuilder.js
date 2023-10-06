@@ -99,7 +99,7 @@ export class SlotBuilder {
         const wrapper = event.target.closest(`.${this.PARENT_CLASS}`)
         const currentFocusedSlotIndex = parseInt(event.target.closest(`.${this.CHILD_CONTAINER_CLASS}`).dataset.slotIndex)
 
-        const customFocusEvent = new CustomEvent("from-child-to-parent--focus-specific-slot", { detail: currentFocusedSlotIndex})
+        const customFocusEvent = new CustomEvent("from-slot-to-list--focus-specific-slot", { detail: currentFocusedSlotIndex})
         
         wrapper.dispatchEvent(customFocusEvent)
     }

@@ -1,6 +1,6 @@
-import { SlotBuilder } from "./slotBuilder.js"
+import { SlotBuilder } from "./SlotBuilder.js"
 
-export class SlotWrapperBuilder {
+export class TaskList {
 
     constructor(){
         this.wrapperElement = null
@@ -28,7 +28,7 @@ export class SlotWrapperBuilder {
     initEvents(){
         this.wrapperElement.addEventListener("click", event => this.handleClick(event))
         this.wrapperElement.addEventListener("change", event => this.handleChange(event))
-        this.wrapperElement.addEventListener("from-child-to-parent--focus-specific-slot", event => this.handleFocusSpecificSlot(event))
+        this.wrapperElement.addEventListener("from-slot-to-list--focus-specific-slot", event => this.handleFocusSpecificSlot(event))
         this.wrapperElement.addEventListener("from-task-constructor-to-slots-wrapper--refresh-slots", event => this.handleRefreshSlots(event))
     }
 
