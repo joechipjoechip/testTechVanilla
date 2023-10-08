@@ -1,8 +1,17 @@
+@import "./variables";
+
 @mixin border-radius {
-    border-radius: 1rem 0;
+    border-radius: 0.5rem;
+    
+    @media #{$mobile}{
+        border-radius: 0;
+    }
 }
 
-@mixin backdrop {
-    backdrop-filter: blu(20px);
+@mixin genericBackground {
     background-color: rgba(255,255,255,0.1);
+    
+    @media #{$mobile}{
+        background-color: rgba(255,255,255,0.05);
+    }
 }

@@ -1,24 +1,42 @@
+@import "./variables";
+
 #app{
     background-image: linear-gradient(to left bottom, #051937, #004d7a, #008793, #00bf72, #a8eb12);
     min-height: 100vh;
-    padding: 1rem;
+    padding: 4rem;
     color: white;
+    font-family: Arial, Helvetica, sans-serif;
 
     input, textarea, button {
         color: white;
+        position: relative;
+        opacity: 0.5;
+        transition: all .4s;
+        
+        &:focus,
+        &:active {
+            opacity: 1;
+        }
+
         &::placeholder {
-            color: white;
+            color: rgba(255,255,255,0.4);
         }
 
         &::-webkit-calendar-picker-indicator {
-            color: white;
-            // display: none;
+            position: absolute;
             background-color: white;
             border-radius: 50%;
             padding: 0.25rem;
             font-size: 0.75rem;
-            top: 2rem;
-            transform: translateY(0.2rem);
+            top: 1rem;
+            right: 1rem;
+            
+            @media #{$mobile}{
+                top: 1.25rem;
+                right: 6rem;
+                padding: 0.5rem;
+                font-size: 2.5rem;
+            }
         }
     }
 }

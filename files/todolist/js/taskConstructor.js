@@ -86,7 +86,6 @@ export class TaskConstructor{
     }
 
     handleKeypress(event){
-        console.log("event key : ", event)
 
         if( event.key.toLowerCase() === "enter" && !event.shiftKey ){
             event.preventDefault()
@@ -138,7 +137,6 @@ export class TaskConstructor{
             body: JSON.stringify({...taskData})
         })
         .then(data => {
-            console.log("data au then du fetch create : ", data)
             this.emptyInputs()
             this.askTasksListRefresh()
         })

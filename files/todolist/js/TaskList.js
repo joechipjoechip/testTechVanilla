@@ -52,7 +52,7 @@ export class TaskList {
 
         this.wrapperElement.addEventListener("from-slot-to-list--focus-specific-slot", event => this.handleFocusSpecificSlot(event))
 
-        this.wrapperElement.addEventListener("from-task-constructor-to-slots-wrapper--refresh-slots", event => this.handleRefreshSlots(event))
+        this.wrapperElement.addEventListener("from-task-constructor-to-slots-wrapper--refresh-slots", () => this.requestFreshList())
 
         this.wrapperElement.addEventListener("from-task-searcher-to-slots-wrapper--filter", event => this.handleSearchFilter(event))
         this.wrapperElement.addEventListener("from-task-searcher-to-slots-wrapper--filter-reset", event => this.handleSearchFilterReset(event))
@@ -107,23 +107,17 @@ export class TaskList {
         .catch(error => console.log("something went wrong : error : ", error))
     }
 
-    handleRefreshSlots(event){
-        console.log("slots wrapper: handleRefresh : ", event)
-
-        this.requestFreshList()
-    }
-
     // Methods
     setActive(slot){
         if( !slot.classList.contains(this.CHILD_CLASS) ){return}
-        
+
         slot.classList.contains("inactive") && slot.classList.remove("inactive")
         !slot.classList.contains("active") && slot.classList.add("active")
     }
 
     setInactive(slot){
         if( !slot.classList.contains(this.CHILD_CLASS) ){return}
-        
+
         !slot.classList.contains("inactive") && slot.classList.add("inactive")
         slot.classList.contains("active") && slot.classList.remove("active")
     }
@@ -221,15 +215,11 @@ export class TaskList {
 
     handleSearchFilter(event){
         const { searchText, searchDate, filtersToApply } = event.detail
-        
-        console.log("filters to apply : ", filtersToApply)
 
         if( !filtersToApply.date && !filtersToApply.text ){
             this.filterIsActive = false
         } else {
-
             this.filterIsActive = true
-    
             this.filteredList = this.freshList.filter(slot => {
     
                 if( filtersToApply.date ){
@@ -246,13 +236,11 @@ export class TaskList {
     
                     }
     
-    
                 } else if( filtersToApply.text && this.filterTextChecker(searchText, slot) ){
                     return slot
                 }
                 
             })
-
         }
 
         this.refreshList()
