@@ -56,7 +56,7 @@ export class TaskSearcher{
         this.resetButton = document.createElement("button")
         Object.assign(this.resetButton, {
             innerText: "Reset search",
-            className: "task-searcher-button-reset"
+            className: "task-searcher-button-reset task-searcher-child"
         })
 
         Object.keys(this.inputs).forEach(inputKey => this.inputs[inputKey].classList.add("task-searcher-child"))

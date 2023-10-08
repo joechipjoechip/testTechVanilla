@@ -1,0 +1,8 @@
+@mixin border-radius {
+    border-radius: 1rem 0;
+}
+
+@mixin backdrop {
+    backdrop-filter: blu(20px);
+    background-color: rgba(255,255,255,0.1);
+}

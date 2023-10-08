@@ -2,4 +2,6 @@
 @import "./_core.scss";
 @import "./_mixins.scss";
 
-@import "./_todolist.scss";
+
+@import "./_app.scss";
+@import "./../todolist/style/todolist";

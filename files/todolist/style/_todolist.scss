@@ -1,6 +1,13 @@
+*[class$="-title"]{
+    width: 100%;
+    margin-bottom: 1rem;
+    font-size: 2rem !important;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .slots {
     &-wrapper {
-        border: solid 1px orange;
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
@@ -8,6 +15,7 @@
         width: 100%;
         // height: 90vh;
         margin: 0 auto;
+        padding-top: 2rem;
     
         & * {
             font-size: 1.25rem;
@@ -21,21 +29,22 @@
 
     &-container {
         @include border-radius;
-        width: 90%;
+        width: 80%;
         display: flex;
         flex-flow: row wrap;
         justify-content: space-around;
-        margin: 1rem auto;
+        align-items: stretch;
         box-shadow: 0 0 20px transparent;
         
         transition: all .35s;
         
         &.active {
             margin: 2rem auto;
-            padding: 1.5rem 0;
+            padding: 1.5rem 1rem;
             opacity: 1;
-            box-shadow: 0 0 20px rgb(230, 230, 230);
+            box-shadow: 0 0 20px rgb(0,0,0,0.4);
             transform: scale(1.05);
+            background-color: rgba(255,255,255,0.5);
         }
     
         &.inactive {
@@ -52,20 +61,19 @@
     
     &-child {
         @include border-radius;
+        @include backdrop;
         padding: 0.75rem;
         overflow: hidden;
-        background-color: #faf1ff;
         cursor: default;
-    }
+        text-align: center;
 
-    &-title {
-        width: 100%;
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+        &[type="date"] {
+            align-items: flex-start;
+        }
     }
 
     &-label {
-        width: 15%;
+        width: 10%;
     }
 
     &-description {
@@ -91,9 +99,11 @@
     }
 
     &-button {
+        &-confirm,
         &-delete,
         &-reset {
             @include border-radius;
+            @include backdrop;
             cursor: pointer;
         }
 
@@ -104,17 +114,30 @@
         }
     }
 
-
 }
 
 .task-builder,
 .task-searcher {
     &-container {
+        @include backdrop;
         padding: 2rem 1rem;
-        background-color: #d9ccff;
+        margin: 0 auto 1rem auto;
     }
     &-child {
         cursor: pointer;
+
+        &:nth-child(1){
+            width: 100%;
+        }
+        &:nth-child(2){
+            width: 30%;
+        }
+        &:nth-child(3){
+            width: 30%;
+        }
+        &:nth-child(4){
+            width: 30%;
+        }
     }
 }
 
@@ -128,7 +151,29 @@
 
         &.active {
             opacity: 1;
-            border: solid 2px green;
+            border: solid 2px white;
+        }
+
+        &:focus {
+            opacity: 1;
+        }
+    }
+
+}
+
+.task-builder {
+    &-container {
+        margin-top: 3rem;
+    }
+}
+
+.slot {
+    &-container {
+        margin: 1rem auto;
+    }
+    &-button {
+        &-delete {
+            width: 10%;
         }
     }
 }

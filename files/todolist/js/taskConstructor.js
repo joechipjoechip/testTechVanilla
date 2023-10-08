@@ -54,14 +54,14 @@ export class TaskConstructor{
             placeholder: "description"
         })
 
-        this.inputs.start_date = document.createElement("input")
-        Object.assign(this.inputs.start_date, {
-            type: "date",
-            placeholder: "date",
-            className: "task-builder-start-date",
-            name: "start_date",
-            value: this.currentDate,
-        })
+        // this.inputs.start_date = document.createElement("input")
+        // Object.assign(this.inputs.start_date, {
+        //     type: "date",
+        //     placeholder: "date",
+        //     className: "task-builder-start-date",
+        //     name: "start_date",
+        //     value: this.currentDate,
+        // })
 
         this.inputs.confirmButton = document.createElement("button")
         Object.assign(this.inputs.confirmButton, {
@@ -126,7 +126,7 @@ export class TaskConstructor{
         taskData.label = encodeURI(taskData.label)
 
         // exception for date format messin' between html format and api format @TODO -> harmonize
-        taskData.start_date += this.arbitraryDateSuffix
+        taskData.start_date = this.currentDate + this.arbitraryDateSuffix
 
         this.actCreateTask(taskData)
     }

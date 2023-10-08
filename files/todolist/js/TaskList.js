@@ -23,6 +23,8 @@ export class TaskList {
     // Basics
     init(){
         this.createWrapperElement()
+        this.createTitle()
+        this.appendTitle()
         this.initEvents()
         this.requestFreshList()
     }
@@ -30,6 +32,18 @@ export class TaskList {
     createWrapperElement(){
         this.wrapperElement = document.createElement("div")
         this.wrapperElement.classList.add("slots-wrapper")
+    }
+
+    createTitle(){
+        this.title = document.createElement("h3")
+        Object.assign(this.title, {
+            innerText: "Tasks list",
+            className: "slots-wrapper-title"
+        })
+    }
+
+    appendTitle(){
+        this.wrapperElement.appendChild(this.title)
     }
 
     initEvents(){
@@ -101,11 +115,15 @@ export class TaskList {
 
     // Methods
     setActive(slot){
+        if( !slot.classList.contains(this.CHILD_CLASS) ){return}
+        
         slot.classList.contains("inactive") && slot.classList.remove("inactive")
         !slot.classList.contains("active") && slot.classList.add("active")
     }
 
     setInactive(slot){
+        if( !slot.classList.contains(this.CHILD_CLASS) ){return}
+        
         !slot.classList.contains("inactive") && slot.classList.add("inactive")
         slot.classList.contains("active") && slot.classList.remove("active")
     }
@@ -155,7 +173,11 @@ export class TaskList {
     }
 
     emptyWrapper(){
-        this.wrapperElement.children.length && Array.from(this.wrapperElement.children).forEach(child => child.parentNode.removeChild(child))
+        this.wrapperElement.children.length && Array.from(this.wrapperElement.children).forEach(child => {
+            if( !child.classList.contains("slots-wrapper-title") ){
+                child.parentNode.removeChild(child)
+            }
+        })
     }
 
     appendList(){

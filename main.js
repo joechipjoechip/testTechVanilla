@@ -1,4 +1,4 @@
-import "./files/todolist/style/main.scss"
+import "./files/style/main.scss"
 
 import { TaskConstructor } from "./files/todolist/js/TaskConstructor.js"
 import { TaskSearcher } from "./files/todolist/js/TaskSearcher.js"
