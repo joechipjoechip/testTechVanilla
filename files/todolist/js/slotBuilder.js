@@ -23,7 +23,6 @@ export class SlotBuilder {
     }
 
     createSlotElement(){
-        // this.slotElement = document.createElement("form");
         this.slotElement = document.createElement("div");
 
         this.slotElement.classList.add(this.CHILD_CONTAINER_CLASS, "inactive")
@@ -87,10 +86,7 @@ export class SlotBuilder {
 
     // Events
     initEvents(){
-        // this.children.endDate.addEventListener("change", event => this.handleChange(event))
         this.children.endDate.addEventListener("focus", event => this.handleFocus(event))
-
-        // this.children.buttonDelete.addEventListener("click", event => this.handleDelete(event))
     }
 
     // Handlers

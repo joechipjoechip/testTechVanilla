@@ -54,15 +54,6 @@ export class TaskConstructor{
             placeholder: "description"
         })
 
-        // this.inputs.start_date = document.createElement("input")
-        // Object.assign(this.inputs.start_date, {
-        //     type: "date",
-        //     placeholder: "date",
-        //     className: "task-builder-start-date",
-        //     name: "start_date",
-        //     value: this.currentDate,
-        // })
-
         this.inputs.confirmButton = document.createElement("button")
         Object.assign(this.inputs.confirmButton, {
             className: "task-builder-button-confirm",

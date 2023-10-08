@@ -7,12 +7,12 @@ export class TaskSearcher{
 
         this.inputs = {}
 
+        this.currentDate = helpersDate.currentDate
+
         this.filtersToApply = {
             date: false,
             text: false
         }
-
-        this.currentDate = helpersDate.currentDate
 
         this.baseText = ""
         this.baseDate = this.currentDate
