@@ -1,14 +1,19 @@
 import { SlotBuilder } from "./SlotBuilder.js"
+import { helpersDate } from "../../helpers/date.js"
 
 export class TaskList {
 
     constructor(){
         this.wrapperElement = null
 
-        this.CHILD_CLASS = "slot-container"
-        this.arbitraryDateSuffix = "T15:00:00Z"
+        this.currentDate = helpersDate.currentDate
+        this.arbitraryDateSuffix = helpersDate.arbitraryDateSuffix
 
-        this.dev = true
+        this.freshList = []
+        this.filteredList = []
+        this.filterIsActive = false
+
+        this.CHILD_CLASS = "slot-container"
 
         this.init()
 
@@ -30,8 +35,13 @@ export class TaskList {
     initEvents(){
         this.wrapperElement.addEventListener("click", event => this.handleClick(event))
         this.wrapperElement.addEventListener("change", event => this.handleChange(event))
+
         this.wrapperElement.addEventListener("from-slot-to-list--focus-specific-slot", event => this.handleFocusSpecificSlot(event))
+
         this.wrapperElement.addEventListener("from-task-constructor-to-slots-wrapper--refresh-slots", event => this.handleRefreshSlots(event))
+
+        this.wrapperElement.addEventListener("from-task-searcher-to-slots-wrapper--filter", event => this.handleSearchFilter(event))
+        this.wrapperElement.addEventListener("from-task-searcher-to-slots-wrapper--filter-reset", event => this.handleSearchFilterReset(event))
     }
 
     // Events handlers
@@ -76,7 +86,10 @@ export class TaskList {
             mode: "cors",
             body: JSON.stringify(updatedValues)
         })
-        .then(() => updatedInputEndDate.classList.add("fullfilled") )
+        .then(() => {
+            updatedInputEndDate.classList.add("fullfilled") 
+            this.checkTasksValidity()
+        })
         .catch(error => console.log("something went wrong : error : ", error))
     }
 
@@ -129,67 +142,115 @@ export class TaskList {
     }
 
     requestFreshList( event ){
-
-        if( this.dev ){
-
-            console.log("dev = true")
-
-            this.freshList = [
-                {
-                    "label": "cin%C3%A9ma",
-                    "description": "demander les horaires à Marc",
-                    "start_date": "2023-10-06T15:00:00Z",
-                    "end_date": ""
-                },
-                {
-                    "label": "courses",
-                    "description": "pain\nlait\noeufs",
-                    "start_date": "2023-10-06T15:00:00Z",
-                    "end_date": "2023-10-08T15:00:00Z"
-                },
-                {
-                    "label": "cadeaux%20noel",
-                    "description": "timoté : tricycle\nmarie : gants MMA",
-                    "start_date": "2023-10-06T15:00:00Z",
-                    "end_date": "2023-12-14T15:00:00Z"
-                },
-                {
-                    "label": "bouquins",
-                    "description": "dora l'exploratrice\n1984",
-                    "start_date": "2023-10-06T15:00:00Z",
-                    "end_date": "2023-11-11T15:00:00Z"
-                }
-            ]
-
-            this.emptyWrapper()
-            this.appendFreshList()
-
-        } else {
-
-            fetch("http://localhost:9000/v1/tasks", {
-                method: "GET",
-                mode: "cors"
-            })
-            .then(response => response.json())
-            .then(response => {
-                this.freshList = response
-    
-                console.log("working data : ", response)
-    
-                this.emptyWrapper()
-                this.appendFreshList()
-    
-            })
-
-        }
+        fetch("http://localhost:9000/v1/tasks", {
+            method: "GET",
+            mode: "cors"
+        })
+        .then(response => response.json())
+        .then(response => {
+            this.freshList = response
+            this.refreshList()
+            this.checkTasksValidity()
+        })
     }
 
     emptyWrapper(){
         this.wrapperElement.children.length && Array.from(this.wrapperElement.children).forEach(child => child.parentNode.removeChild(child))
     }
 
-    appendFreshList(){
-        this.freshList.length && this.freshList.forEach((infos, slotIndex) => this.wrapperElement.appendChild(new SlotBuilder({ infos, slotIndex })))
+    appendList(){
+        if( this.filterIsActive ){
+            this.filteredList.forEach((infos, slotIndex) => this.wrapperElement.appendChild(new SlotBuilder({ infos, slotIndex })))
+        } else {
+            this.freshList.forEach((infos, slotIndex) => this.wrapperElement.appendChild(new SlotBuilder({ infos, slotIndex })))
+        }
     }
+
+    refreshList(){
+        this.emptyWrapper()
+        this.appendList()
+    }
+
+    checkTasksValidity(){
+        const tasks = Array.from(this.wrapperElement.querySelectorAll(".slot-container"))
+        const currentDateTimestamp = new Date(this.currentDate).getTime()
+
+        tasks.forEach(task => {
+            const taskEndDate = task.querySelector(".slot-end-date").value
+            const taskEndDateTimestamp = new Date(taskEndDate).getTime()
+
+            if( taskEndDateTimestamp < currentDateTimestamp ){
+                // task is validated
+                this.setTaskValidity(task, true)
+            } else {
+                // task is not validated
+                this.setTaskValidity(task, false)
+            }
+        })
+    }
+
+    setTaskValidity(task, validity){
+        if( validity ){
+            !task.classList.contains("is-validated") && task.classList.add("is-validated")
+        } else {
+            task.classList.contains("is-validated") && task.classList.remove("is-validated")
+        }
+    }
+
+    handleSearchFilter(event){
+        const { searchText, searchDate, filtersToApply } = event.detail
+        
+        console.log("filters to apply : ", filtersToApply)
+
+        if( !filtersToApply.date && !filtersToApply.text ){
+            this.filterIsActive = false
+        } else {
+
+            this.filterIsActive = true
+    
+            this.filteredList = this.freshList.filter(slot => {
+    
+                if( filtersToApply.date ){
+    
+                    if( this.filterDateChecker(searchDate, slot) ) {
+    
+                        if( filtersToApply.text) {
+                            if( this.filterTextChecker(searchText, slot) ){
+                                return slot
+                            }
+                        } else {
+                            return slot
+                        }
+    
+                    }
+    
+    
+                } else if( filtersToApply.text && this.filterTextChecker(searchText, slot) ){
+                    return slot
+                }
+                
+            })
+
+        }
+
+        this.refreshList()
+    }
+
+    handleSearchFilterReset(){
+        this.filterIsActive = false
+        this.requestFreshList()
+    }
+
+    filterDateChecker(searchDate, slot){
+        // @TODO -> ask about ambigious : filter by start_date or end_date ? exact values or >= / <= ?
+        const formatedSearchDate = searchDate + this.arbitraryDateSuffix
+        return (slot.start_date === formatedSearchDate || slot.end_date === formatedSearchDate)
+    }
+
+    filterTextChecker(searchText, slot){
+        return (slot.label.trim().includes(searchText) || slot.description.trim().includes(searchText))
+    }
+
+
 
 }

@@ -1,10 +1,13 @@
+import { helpersDate } from "../../helpers/date"
+
 export class TaskConstructor{
+    
     constructor(element){
         this.element = null
         this.inputs = {}
 
-        this.currentDate = new Date().toJSON().split("T")[0]
-        this.arbitraryDateSuffix = "T15:00:00Z"
+        this.currentDate = helpersDate.currentDate
+        this.arbitraryDateSuffix = helpersDate.arbitraryDateSuffix
 
         this.init()
 
@@ -21,13 +24,20 @@ export class TaskConstructor{
     createWrapperElement(){
         this.element = document.createElement("form")
         Object.assign(this.element, {
-            classList: "task-builder-wrapper",
+            classList: "task-builder-container",
             id: "task-builder",
             name: "task-builder"
         })
     }
 
     createInputsElements(){
+        this.title = document.createElement("h4")
+        Object.assign(this.title, {
+            innerText: "Create a task",
+            className: "task-builder-title"
+        })
+
+
         this.inputs.label = document.createElement("input")
         Object.assign(this.inputs.label, {
             type: "text",
@@ -48,7 +58,7 @@ export class TaskConstructor{
         Object.assign(this.inputs.start_date, {
             type: "date",
             placeholder: "date",
-            className: "task-builder-date",
+            className: "task-builder-start-date",
             name: "start_date",
             value: this.currentDate,
         })
@@ -59,11 +69,12 @@ export class TaskConstructor{
             innerText: "Create this task"
         })
 
-        // and for all
+        // and for all inputs :
         Object.keys(this.inputs).forEach(inputKey => this.inputs[inputKey].classList.add("task-builder-child"))
     }
 
     appendChildrenToParent(){
+        this.element.appendChild(this.title)
         Object.keys(this.inputs).forEach(inputKey => this.element.appendChild(this.inputs[inputKey]))
     }
 

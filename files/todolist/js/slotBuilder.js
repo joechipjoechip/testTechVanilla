@@ -52,8 +52,7 @@ export class SlotBuilder {
         this.children.startDate = document.createElement("p")
         Object.assign(this.children.startDate, {
             className: "slot-start-date",
-            innerText: this.infos.start_date.split("T")[0]
-            // .split() because we have "2022-06-01T15:00:00Z" and the html standard is "2018-07-22"
+            innerText: this.infos.start_date.split("T")[0].split("-").reverse().join(" / ")
         })
 
         // End date

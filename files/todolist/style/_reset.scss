@@ -41,11 +41,17 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-input {
+input, textarea {
     outline: none;
     border: none;
+	resize: none;
 }
 button {
 	border: none;
 	outline: none;
+}
+
+*{
+	-webkit-font-smoothing: antialiased;
+  	-moz-osx-font-smoothing: grayscale;
 }
