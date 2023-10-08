@@ -95,16 +95,7 @@ export class TaskList {
             // @ask -> why not all the rest (except label) ?
         }
 
-        fetch(`http://localhost:9000/v1/tasks/${encodeURI(labelToTarget)}`, {
-            method: "PUT",
-            mode: "cors",
-            body: JSON.stringify(updatedValues)
-        })
-        .then(() => {
-            updatedInputEndDate.classList.add("fullfilled") 
-            this.checkTasksValidity()
-        })
-        .catch(error => console.log("something went wrong : error : ", error))
+        this.updateTask(labelToTarget, updatedValues, updatedInputEndDate)
     }
 
     // Methods
@@ -136,6 +127,19 @@ export class TaskList {
         if( clickedElement.classList.contains("slot-button-delete") ){
             this.deleteTask(clickedElement)
         }
+    }
+
+    updateTask(labelToTarget, updatedValues, updatedInputEndDate){
+        fetch(`http://localhost:9000/v1/tasks/${encodeURI(labelToTarget)}`, {
+            method: "PUT",
+            mode: "cors",
+            body: JSON.stringify(updatedValues)
+        })
+        .then(() => {
+            updatedInputEndDate.classList.add("fullfilled") 
+            this.checkTasksValidity()
+        })
+        .catch(error => console.log("something went wrong : error : ", error))
     }
 
     deleteTask(taskToDelete){
@@ -260,7 +264,5 @@ export class TaskList {
     filterTextChecker(searchText, slot){
         return (slot.label.trim().includes(searchText) || slot.description.trim().includes(searchText))
     }
-
-
-
+    
 }
